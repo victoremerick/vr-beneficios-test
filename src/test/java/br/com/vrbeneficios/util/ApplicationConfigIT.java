@@ -1,12 +1,12 @@
 package br.com.vrbeneficios.util;
 
-import br.com.vrbeneficios.autorizacao.application.CartaoApplicationService;
-import br.com.vrbeneficios.autorizacao.database.CartaoRepositoryService;
+import br.com.vrbeneficios.cartao.application.CartaoApplicationService;
+import br.com.vrbeneficios.cartao.database.CartaoRepositoryService;
+import br.com.vrbeneficios.transacao.application.TransacaoApplicationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +23,10 @@ public class ApplicationConfigIT {
     protected MockMvc mock;
 
     @Autowired
-    protected CartaoApplicationService service;
+    protected CartaoApplicationService cartaoApplicationService;
+
+    @Autowired
+    protected TransacaoApplicationService transacaoApplicationService;
 
     @Autowired
     protected CartaoRepositoryService repository;
