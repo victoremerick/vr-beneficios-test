@@ -13,9 +13,10 @@ public class TestUtils {
     public static String objectToJson(Object o){
         try {
             return mapper.writeValueAsString(o);
-        } finally{
-            return "";
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
     public static <T> T jsonToObject(String t, Class<T> tclass){

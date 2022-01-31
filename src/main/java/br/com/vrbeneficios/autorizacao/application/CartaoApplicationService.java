@@ -1,7 +1,9 @@
 package br.com.vrbeneficios.autorizacao.application;
 
 import br.com.vrbeneficios.autorizacao.Util;
-import br.com.vrbeneficios.autorizacao.api.dto.response.CartaoCriadoDto;
+import br.com.vrbeneficios.autorizacao.api.dto.request.CriarCartaoRequest;
+import br.com.vrbeneficios.autorizacao.api.dto.response.CartaoCriadoResponse;
+import br.com.vrbeneficios.autorizacao.application.exception.CartaoJaCadastradoException;
 import br.com.vrbeneficios.autorizacao.application.model.Cartao;
 import br.com.vrbeneficios.autorizacao.database.CartaoRepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,8 @@ public class CartaoApplicationService {
     @Autowired
     private CartaoRepositoryService repositoryService;
 
-    public CartaoCriadoDto handle(){
+    public CartaoCriadoResponse handle(CriarCartaoRequest request){
+        repositoryService.selecionar(request.getNumero()).ifPresent(cartao -> {throw new CartaoJaCadastradoException();});
         var cartao = Cartao.builder()
                 .numero(Util.gerarNumeroCartao())
                 .saldo(500)
@@ -21,7 +24,6 @@ public class CartaoApplicationService {
                 .build();
 
         cartao = repositoryService.persistir(cartao);
-
-        return CartaoCriadoDto.from(cartao);
+        return CartaoCriadoResponse.from(cartao);
     }
 }
