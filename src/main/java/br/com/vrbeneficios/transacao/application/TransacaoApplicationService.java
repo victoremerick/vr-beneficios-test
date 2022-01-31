@@ -7,6 +7,7 @@ import br.com.vrbeneficios.transacao.application.exception.TransacaoSaldoInsufic
 import br.com.vrbeneficios.transacao.application.exception.TransacaoSenhaIncorretaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TransacaoApplicationService {
@@ -14,6 +15,7 @@ public class TransacaoApplicationService {
     @Autowired
     private CartaoRepositoryService repositoryService;
 
+    @Transactional
     public void handle(AutorizarCartaoRequest request){
         repositoryService.selecionar(request.getNumero()).ifPresentOrElse(
         cartao -> {
