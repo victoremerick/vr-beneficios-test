@@ -132,3 +132,10 @@ Desafios (não obrigatórios):
  * é possível construir a solução inteira sem utilizar nenhum if. Só não pode usar *break* e *continue*! 
  * como garantir que 2 transações disparadas ao mesmo tempo não causem problemas relacionados à concorrência?
 Exemplo: dado que um cartão possua R$10.00 de saldo. Se fizermos 2 transações de R$10.00 ao mesmo tempo, em instâncias diferentes da aplicação, como o sistema deverá se comportar?
+
+### Considerações finais:
+
+Acredito que as transações devem ser tratadas em banco de dados, através de procedures ou functions, onde realmente tem como garantir que uma transação irá acontecer por vez e bancos de dados não possuem diversas instâncias, mas diversas conexões simultâneas.
+Eu realmente gostaria de ver uma solução sem if, pois não consegui lembrar de um meio de comparar as senhas e saldos sem utilizar.
+No mais divirtam-se, a aplicação possui os testes unitários e integrados, está bem legal de ver.
+
