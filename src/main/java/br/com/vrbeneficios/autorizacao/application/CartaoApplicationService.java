@@ -3,6 +3,7 @@ package br.com.vrbeneficios.autorizacao.application;
 import br.com.vrbeneficios.autorizacao.Util;
 import br.com.vrbeneficios.autorizacao.api.dto.request.CriarCartaoRequest;
 import br.com.vrbeneficios.autorizacao.api.dto.response.CartaoCriadoResponse;
+import br.com.vrbeneficios.autorizacao.application.exception.CartaoInexistenteException;
 import br.com.vrbeneficios.autorizacao.application.exception.CartaoJaCadastradoException;
 import br.com.vrbeneficios.autorizacao.application.model.Cartao;
 import br.com.vrbeneficios.autorizacao.database.CartaoRepositoryService;
@@ -25,5 +26,11 @@ public class CartaoApplicationService {
 
         cartao = repositoryService.persistir(cartao);
         return CartaoCriadoResponse.from(cartao);
+    }
+
+    public Double handle(String numeroCartao){
+        var cartao = repositoryService.selecionar(numeroCartao)
+                .orElseThrow(CartaoInexistenteException::new);
+        return cartao.getSaldo();
     }
 }

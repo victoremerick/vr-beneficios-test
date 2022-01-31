@@ -15,9 +15,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static java.util.Objects.nonNull;
 
 public class ApiTestFactory {
+
     public static MvcResult incluir(MockMvc mock, ResultMatcher resultadoEsperado, CriarCartaoRequest request) throws Exception {
         return mock.perform(post("/cartoes")
                         .contentType(MediaType.APPLICATION_JSON_VALUE).content(objectToJson(request)))
+                .andExpect(resultadoEsperado).andReturn();
+    }
+
+    public static MvcResult getSaldo(MockMvc mock, ResultMatcher resultadoEsperado, String numeroCartao) throws Exception {
+        return mock.perform(get("/cartoes/"+numeroCartao)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(resultadoEsperado).andReturn();
     }
 
