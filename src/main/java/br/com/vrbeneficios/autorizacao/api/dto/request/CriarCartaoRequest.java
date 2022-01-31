@@ -14,11 +14,4 @@ import lombok.NoArgsConstructor;
 public class CriarCartaoRequest {
     private String numero;
     private String senha;
-
-    public static CriarCartaoRequest from(Cartao cartao){
-        return CriarCartaoRequest.builder()
-                .numero(cartao.getNumero())
-                .senha(cartao.getSenha())
-                .build();
-    }
 }

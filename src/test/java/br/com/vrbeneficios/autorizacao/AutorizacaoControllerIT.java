@@ -1,6 +1,7 @@
 package br.com.vrbeneficios.autorizacao;
 
 import br.com.vrbeneficios.autorizacao.api.dto.response.CartaoCriadoResponse;
+import br.com.vrbeneficios.autorizacao.application.exception.CartaoInexistenteException;
 import br.com.vrbeneficios.autorizacao.application.exception.CartaoJaCadastradoException;
 import br.com.vrbeneficios.autorizacao.util.ApiTestFactory;
 import br.com.vrbeneficios.util.ControllerConfigIT;
@@ -27,9 +28,27 @@ public class AutorizacaoControllerIT extends ControllerConfigIT {
     public void NaoDeveCriarCartao() throws Exception {
         var cartaoResquest = AutorizacaoTestFactory.umCriarCartaoRequest();
         Mockito.when(service.handle(cartaoResquest)).thenThrow(new CartaoJaCadastradoException());
-
         var result = ApiTestFactory.incluir(mock, status().isUnprocessableEntity(), cartaoResquest).getResponse();
         var response = result.getContentAsString();
         Assertions.assertEquals(response, TestUtils.objectToJson(cartaoResquest));
+    }
+    @Test
+    @DisplayName("Nao deve retornar o saldo do cartao")
+    public void naoDeveRetornarSaldo() throws Exception {
+        var cartaoResquest = AutorizacaoTestFactory.umCriarCartaoRequest();
+        Mockito.when(service.handle(cartaoResquest.getNumero())).thenThrow(new CartaoInexistenteException());
+        ApiTestFactory.getSaldo(mock, status().isNotFound(), cartaoResquest.getNumero()).getResponse();
+        Mockito.verify(service).handle(cartaoResquest.getNumero());
+    }
+
+    @Test
+    @DisplayName("Deve retornar o saldo do cartao")
+    public void deveRetornarSaldo() throws Exception {
+        var cartao = AutorizacaoTestFactory.umCartao();
+        ApiTestFactory.persistir(repository, cartao);
+
+        var result = ApiTestFactory.getSaldo(mock, status().isOk(), cartao.getNumero()).getResponse();
+        var response = result.getContentAsString();
+        Assertions.assertEquals(response, String.format("%.2f", cartao.getSaldo()));
     }
 }
